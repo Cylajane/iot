@@ -1,0 +1,75 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class WaterLevelSensor {
+
+    // Method to simulate water level measurement
+    public static double measureWaterLevel(double currentLevel) {
+        // Simulate water level change
+        Random rand = new Random();
+        double change = rand.nextDouble() * 10 - 5; // Random change between -5 and +5
+        currentLevel += change;
+
+        // Ensure water level stays within 0-100 range
+        if (currentLevel < 0) {
+            currentLevel = 0;
+        } else if (currentLevel > 100) {
+            currentLevel = 100;
+        }
+
+        return currentLevel;
+    }
+
+    // Method to authenticate user
+    public static boolean authenticateUser(String username, String password) {
+        // Simulate authentication (replace this with your actual authentication logic)
+        return username.equals("admin") && password.equals("password");
+    }
+
+    // Method to check if water level is suitable for farming
+    public static boolean isWaterLevelSuitable(double waterLevel) {
+        // Check if water level is within suitable range for farming (e.g., 30% to 70%)
+        return waterLevel >= 30 && waterLevel <= 70;
+    }
+
+    // Main method
+    public static void main(String[] args) throws InterruptedException {
+        Scanner scanner = new Scanner(System.in);
+
+        // Prompt the user to enter username and password
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+
+        // Authenticate user
+        if (authenticateUser(username, password)) {
+            double waterLevel = 50.0; // Initial water level
+            Random rand = new Random();
+
+            while (true) {
+                // Measure water level
+                waterLevel = measureWaterLevel(waterLevel);
+
+                // Print the measured water level
+                System.out.println("Water Level: " + waterLevel);
+
+                // Check if water level is suitable for farming
+                if (isWaterLevelSuitable(waterLevel)) {
+                    System.out.println("Water level is suitable for farming.");
+                } else {
+                    System.out.println("Water level is not suitable for farming.");
+
+
+                }
+
+                // Wait for some time before taking the next reading
+                Thread.sleep(10000); // Adjust this value according to your requirement (10 seconds in milliseconds)
+            }
+        } else {
+            System.out.println("Authentication failed. Exiting...");
+        }
+
+        scanner.close();
+    }
+}
