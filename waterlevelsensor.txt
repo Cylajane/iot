@@ -1,0 +1,80 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class WaterLevelSensor {
+    
+    public static double measureWaterLevel(double currentLevel) {
+        Random rand = new Random();
+        double change = rand.nextDouble() * 4 - 2; 
+        currentLevel += change;
+        
+        if (currentLevel < 0) {
+            currentLevel = 0;
+        } else if (currentLevel > 100) {
+            currentLevel = 100;
+        }
+        
+        return currentLevel;
+    }
+    
+    public static boolean authenticateUser(String username, String password) {
+        return username.equals("cylajane") && password.equals("gonzales");
+    }
+
+    public static boolean isWaterLevelSuitable(double waterLevel) {
+        return waterLevel >= 30 && waterLevel <= 70;
+    }
+    
+    public static void main(String[] args) throws InterruptedException {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+        
+        if (authenticateUser(username, password)) {
+            double waterLevel = 50.0; 
+            Random rand = new Random();
+            boolean continueSensing = true;
+            
+            while (continueSensing) {
+                waterLevel = measureWaterLevel(waterLevel);
+                
+                System.out.println("Water Level: " + waterLevel);
+                
+                if (isWaterLevelSuitable(waterLevel)) {
+                    System.out.println("Water level is suitable for farming.");
+                } else {
+                    System.out.println("Water level is not suitable for farming.");
+                }
+                
+                System.out.print("Enter command ('pause' to stop, 'resume' to continue): ");
+                String command = scanner.nextLine();
+                
+                if (command.equalsIgnoreCase("pause")) {
+                    continueSensing = false;
+                    System.out.println("Water level sensing stopped.");
+                    
+                    System.out.print("Do you want to exit the simulation? (yes/no): ");
+                    String exitCommand = scanner.nextLine();
+                    
+                    if (exitCommand.equalsIgnoreCase("yes")) {
+                        System.out.println("Exiting the simulation...");
+                        break;
+                    } else {
+                        continueSensing = true;
+                    }
+                } else if (!command.equalsIgnoreCase("resume")) {
+                    System.out.println("Invalid command. Please enter 'pause' or 'resume'.");
+                }
+                
+                Thread.sleep(5000); 
+            }
+        } else {
+            System.out.println("Authentication failed. Exiting...");
+        }
+        
+        scanner.close();
+    }
+}
